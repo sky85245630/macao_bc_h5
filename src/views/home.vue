@@ -17,9 +17,25 @@
                     >第2021204期截止時間：2021-07-23 21:15:00</span
                 >
             </div>
-            <div style="padding:30px 20px">
+            <div>
                 <el-row class="mt-5">
-                    <el-col :span="15">
+                    <el-col :span="24">
+                        <FlipClock></FlipClock>
+                        <div>
+                            <el-button type="warning">開獎驗證</el-button>
+                            <el-button type="danger">直播</el-button>
+                        </div>
+                        <br />
+                        <span
+                            style="font-size:18px;cursor:pointer"
+                            @click="$router.push('/post')"
+                            >開獎歷史查詢></span
+                        >
+                    </el-col>
+                </el-row>
+
+                <el-row class="mt-5">
+                    <el-col :span="24">
                         <span style="font-weight:bold"
                             >澳門六合彩 第<span
                                 style="font-weight:200;color:red"
@@ -43,19 +59,6 @@
                                 </span>
                             </span>
                         </div>
-                    </el-col>
-                    <el-col :span="9">
-                        <FlipClock></FlipClock>
-                        <div>
-                            <el-button type="warning">開獎驗證</el-button>
-                            <el-button type="danger">直播</el-button>
-                        </div>
-                        <br />
-                        <span
-                            style="font-size:18px;cursor:pointer"
-                            @click="$router.push('/post')"
-                            >開獎歷史查詢></span
-                        >
                     </el-col>
                 </el-row>
             </div>
@@ -222,7 +225,6 @@ export default {
 
 .num {
     height: 60px;
-    padding-left: 20px;
     margin-top: 40px;
 }
 
@@ -240,14 +242,14 @@ export default {
 
 .num .balls {
     display: inline-block;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
     text-align: center;
-    line-height: 56px;
+    line-height: 40px;
     background-position: -6px -5px;
-    background-size: 70px;
+    background-size: 50px;
     background-repeat: no-repeat;
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 600;
 }
 
@@ -265,12 +267,12 @@ export default {
 }
 
 .num .ball {
-    margin-right: 30px;
+    margin-right: 0px;
     position: relative;
     text-align: center;
     display: inline-block;
-    height: 60px;
-    width: 60px;
+    height: 40px;
+    width: 40px;
 }
 
 .num_sm .ball {
@@ -284,8 +286,8 @@ export default {
     color: #515151;
     font-size: 15px;
     position: absolute;
-    top: 70px;
-    left: 23px;
+    top: 40px;
+    left: 13px;
 }
 
 .num_sm .ball .shengxiao {

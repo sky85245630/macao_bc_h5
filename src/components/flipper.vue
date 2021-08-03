@@ -86,7 +86,7 @@ export default {
 .M-Flipper {
     display: inline-block;
     position: relative;
-    width: 60px;
+    width: 40px;
     height: 100px;
     line-height: 100px;
     border: solid 1px #000;

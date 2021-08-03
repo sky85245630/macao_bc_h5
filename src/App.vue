@@ -11,45 +11,68 @@
                 </el-row>
             </div>
 
-            <el-menu
-                :default-active="activeIndex"
-                class="el-menu-demo fixed_menu"
-                mode="horizontal"
-                @select="handleSelect"
-            >
-                <el-row>
-                    <el-col style="width:20%">
-                        <el-menu-item index="1" @click="$router.push('/home')">
-                            <div><i class="el-icon-basketball"></i></div>
-                            <div>首頁</div>
-                        </el-menu-item>
-                    </el-col>
-                    <el-col style="width:20%">
-                        <el-menu-item index="2" @click="$router.push('/post')">
-                            開獎公告
-                        </el-menu-item>
-                    </el-col>
-                    <el-col style="width:20%">
-                        <el-menu-item index="3" @click="$router.push('/live')">
-                            開獎視頻
-                        </el-menu-item>
-                    </el-col>
-                    <el-col style="width:20%">
-                        <el-menu-item index="4" @click="$router.push('/faq')">
-                            FAQ
-                        </el-menu-item>
-                    </el-col>
-                    <el-col style="width:20%">
-                        <el-menu-item index="5" @click="$router.push('/about')">
-                            關於我們
-                        </el-menu-item>
-                    </el-col>
-                </el-row>
-            </el-menu>
-
             <router-view />
-            <footer>
-                <span>版權所有 不得轉載 © 2020 澳門六合彩</span>
+            <footer class="app_footer">
+                <el-menu
+                    :default-active="activeIndex"
+                    class="el-menu-demo fixed_menu"
+                    mode="horizontal"
+                    @select="handleSelect"
+                >
+                    <el-row>
+                        <el-col style="width:20%">
+                            <el-menu-item
+                                index="1"
+                                @click="$router.push('/home')"
+                            >
+                                <i class="el-icon-basketball"></i>
+                                <p class="footer_p">首頁</p>
+                            </el-menu-item>
+                        </el-col>
+                        <el-col style="width:20%">
+                            <el-menu-item
+                                index="2"
+                                @click="$router.push('/post')"
+                            >
+                                <i class="el-icon-bell"></i>
+                                <p class="footer_p">開獎公告</p>
+                            </el-menu-item>
+                        </el-col>
+                        <el-col style="width:20%">
+                            <el-menu-item
+                                index="3"
+                                @click="$router.push('/live')"
+                            >
+                                <i class="el-icon-video-camera"></i>
+                                <p class="footer_p">
+                                    開獎視頻
+                                </p>
+                            </el-menu-item>
+                        </el-col>
+                        <el-col style="width:20%">
+                            <el-menu-item
+                                index="4"
+                                @click="$router.push('/faq')"
+                            >
+                                <i class="el-icon-question"></i>
+                                <p class="footer_p">
+                                    FAQ
+                                </p>
+                            </el-menu-item>
+                        </el-col>
+                        <el-col style="width:20%">
+                            <el-menu-item
+                                index="5"
+                                @click="$router.push('/about')"
+                            >
+                                <i class="el-icon-user"></i>
+                                <p class="footer_p">
+                                    關於我們
+                                </p>
+                            </el-menu-item>
+                        </el-col>
+                    </el-row>
+                </el-menu>
             </footer>
         </el-col>
     </div>
@@ -109,8 +132,70 @@ footer {
     padding: 20px 0;
 }
 
+/*
+.footer_list {
+}
+
+.footer_li {
+    list-style: none;
+}
+.footer-list-item:not(:last-child) {
+    border-right: 1px solid #fff;
+}
+
+.footer-list-item.is-active {
+    color: #fff;
+    background-color: #d80011;
+} */
+
+.el-menu {
+    border-right: solid 1px #e6e6e6;
+    list-style: none;
+    position: relative;
+    margin: 0;
+    color: white;
+    padding-left: 0;
+    background-color: #0068b7 !important;
+    z-index: 999;
+    width: 100%;
+}
+
+.footer_p {
+    margin: 0px;
+    line-height: normal;
+}
+
 .el-menu-item.is-active {
-    color: #409eff !important;
+    color: white !important;
+    background-color: red !important;
+}
+
+.el-menu-item {
+    color: white !important;
+    text-align: center;
+    font-size: 18px;
+    padding: 10px 20px !important;
+    vertical-align: middle;
+}
+
+.el-menu-item p {
+    color: #fff;
+}
+
+.el-menu-item i {
+    color: white !important;
+}
+
+.el-menu-item [class^="el-icon-"] {
+    margin-right: 0px;
+    display: block;
+    width: auto !important;
+    margin: 0px !important;
+}
+
+.el-menu-item:hover {
+    color: white !important;
+    background-color: red !important;
 }
 
 .fixed_menu {

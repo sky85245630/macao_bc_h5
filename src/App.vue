@@ -5,7 +5,11 @@
                 <el-row>
                     <el-col :span="6">
                         <div style="float: left;">
-                            <img alt="Vue logo" src="@/assets/logo.png" />
+                            <img
+                                alt="Vue logo"
+                                src="@/assets/logo.png"
+                                style="width: 100px;"
+                            />
                         </div>
                     </el-col>
                 </el-row>
@@ -113,7 +117,7 @@ export default {
 }
 
 #nav {
-    padding: 30px;
+    padding: 10px;
     border-bottom: 1px solid #dadada;
 }
 

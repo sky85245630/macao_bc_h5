@@ -17,7 +17,7 @@
                     >第2021204期截止時間：2021-07-23 21:15:00</span
                 >
             </div>
-            <div>
+            <div style="padding:50px 0">
                 <el-row class="mt-5">
                     <el-col :span="24">
                         <FlipClock></FlipClock>
@@ -65,14 +65,13 @@
         </div>
 
         <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="issue" label="期號">
+            <el-table-column prop="issue" label="期號" width="100">
                 <template slot-scope="e">
                     第<span style="color:red">{{ e.row.issue }}</span
                     >期
                 </template>
             </el-table-column>
-            <el-table-column prop="openTime" label="開獎時間">
-            </el-table-column>
+
             <el-table-column label="中獎號碼">
                 <template slot-scope="e">
                     <div class="num_sm">
@@ -92,11 +91,6 @@
                             </span>
                         </span>
                     </div>
-                </template>
-            </el-table-column>
-            <el-table-column label="開獎回放">
-                <template slot-scope="e">
-                    <el-button type="danger" @click="asd(e)">直播</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -337,5 +331,9 @@ export default {
 .el-table th {
     background-color: #eee;
     color: black;
+}
+
+.el-table .cell {
+    padding-right: 0px !important;
 }
 </style>

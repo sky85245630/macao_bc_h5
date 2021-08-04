@@ -1,18 +1,15 @@
 <template>
     <div class="home" style="margin: 20px 0 ;">
-        <el-row>
-            <el-col :span="5"
-                ><h1 style="text-align: left;">開獎視頻</h1></el-col
-            >
-            <el-col :span="19"
-                ><h4 style="text-align: left;line-height: 50px;">
-                    <span style="color: #a68452;">即時開獎驗證：</span>
+        <el-row class="open-notice">
+            <el-col :span="24" style="padding: 0 20px;"
+                ><h4 style="text-align: left;    margin: 5px;">
+                    <span style="color: #a68452;">即時開獎驗證：</span><br />
                     開獎現場直播，同步播報中央電視臺1套視頻，開獎過程100%公開公正！
                 </h4></el-col
             >
         </el-row>
 
-        <div style="text-align: left;">
+        <div class="mt20" style="text-align: left;">
             <el-button type="danger" round>澳門六合彩</el-button>
         </div>
 
@@ -26,10 +23,22 @@
 
         <div class="mt30">
             <el-row>
-                <el-col :span="16" style="text-align:left"
-                    >澳門六合彩 開獎公告</el-col
+                <el-col :span="10" style="text-align:left;line-height: 2.5;"
+                    >開獎視頻</el-col
                 >
-                <el-col :span="4"
+
+                <el-col :span="14"
+                    ><el-input
+                        v-model="input"
+                        placeholder="请输入期號"
+                        style="width: 120px;margin-right:10px"
+                    ></el-input
+                    ><el-button type="primary">搜尋</el-button></el-col
+                >
+            </el-row>
+
+            <el-row class="mt20" style="text-align:left"
+                ><el-col :span="24"
                     ><el-button
                         round
                         :type="year == 0 ? 'danger' : ''"
@@ -43,18 +52,10 @@
                         @click="year = 1"
                         >去年</el-button
                     ></el-col
-                >
-                <el-col :span="4"
-                    ><el-input
-                        v-model="input"
-                        placeholder="请输入期號"
-                        style="width: 120px;margin-right:10px"
-                    ></el-input
-                    ><el-button type="primary">搜尋</el-button></el-col
-                >
-            </el-row>
+                ></el-row
+            >
             <el-row>
-                <el-col class="mt50" :span="8" v-for="e in 8" :key="e">
+                <el-col class="mt50" :span="12" v-for="e in 8" :key="e">
                     <img src="@/assets/logo.png" alt="" />
                     <div class="mt20">
                         澳門六合彩 第<span class="red"> 2021206 </span>期
@@ -209,5 +210,21 @@ export default {
 
 .mt50 {
     margin-top: 50px;
+}
+.open-notice {
+    background-color: #fff6e4;
+    border-radius: 2px;
+    margin: 0 auto;
+    width: 95%;
+    overflow: hidden;
+    padding: 0.1rem 0.15rem;
+}
+
+.el-pagination {
+    white-space: nowrap;
+    padding: 3px 5px !important;
+    color: #303133;
+    margin: 10px 0px !important;
+    font-weight: 700;
 }
 </style>

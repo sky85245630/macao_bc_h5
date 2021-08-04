@@ -204,7 +204,7 @@ export default {
 
 .el-carousel__container {
     position: relative;
-    height: 110px !important;
+    height: 130px !important;
 }
 
 .box_title .title {

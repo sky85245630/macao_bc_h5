@@ -2,19 +2,31 @@
     <div class="home" style="margin: 20px 0 ;">
         <h1 style="text-align: left;">開獎公告</h1>
         <div style="text-align: left;">
-            <el-button round :type="type == 0 ? 'danger' : ''" @click="type = 0"
+            <el-button
+                size="small"
+                round
+                :type="type == 0 ? 'danger' : ''"
+                @click="type = 0"
                 >FAQ</el-button
             >
 
-            <el-button :type="type == 1 ? 'danger' : ''" round @click="type = 1"
+            <el-button
+                size="small"
+                :type="type == 1 ? 'danger' : ''"
+                round
+                @click="type = 1"
                 >技術支持</el-button
             >
-            <el-button :type="type == 2 ? 'danger' : ''" round @click="type = 2"
+            <el-button
+                size="small"
+                :type="type == 2 ? 'danger' : ''"
+                round
+                @click="type = 2"
                 >公告列表</el-button
             >
         </div>
 
-        <div v-show="type == 0" style="text-align:left;padding: 30px 300px;">
+        <div v-show="type == 0" style="text-align:left;">
             <h1 style="text-align: center;">澳門六合彩FAQ</h1>
             <br />
             1、澳門六合彩在什麼時間段可以購買？<br />
@@ -36,7 +48,7 @@
             答：根據《奖券规例》規定任何獎券彩票（包括損毀彩票）不會獲得派發獎金或發還退款，除非該彩票可憑其獨有的序列號碼辨證。<br /><br />
         </div>
 
-        <div v-show="type == 1" style="text-align:left;padding: 30px 300px;">
+        <div v-show="type == 1" style="text-align:left;">
             <h1 style="text-align: center;">技術支持</h1>
             <br />
             最低硬件系統要求：<br /><br />
@@ -51,7 +63,7 @@
             或以上)，Safari (瀏覽器v4.0 或以上)。<br /><br /><br />
         </div>
 
-        <div v-show="type == 2" style="text-align:left;padding: 30px 300px;">
+        <div v-show="type == 2" style="text-align:left;">
             <h1 style="text-align: center;">公告列表</h1>
             <br />
             <br /><br /><br />

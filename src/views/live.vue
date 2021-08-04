@@ -10,7 +10,7 @@
         </el-row>
 
         <div class="mt20" style="text-align: left;">
-            <el-button type="danger" round>澳門六合彩</el-button>
+            <el-button size="small" type="danger" round>澳門六合彩</el-button>
         </div>
 
         <div class="mt30">
@@ -23,23 +23,27 @@
 
         <div class="mt30">
             <el-row>
-                <el-col :span="10" style="text-align:left;line-height: 2.5;"
+                <el-col :span="10" style="text-align:left;line-height: 2;"
                     >開獎視頻</el-col
                 >
 
                 <el-col :span="14"
                     ><el-input
+                        size="small"
                         v-model="input"
                         placeholder="请输入期號"
                         style="width: 120px;margin-right:10px"
                     ></el-input
-                    ><el-button type="primary">搜尋</el-button></el-col
+                    ><el-button size="small" type="primary"
+                        >搜尋</el-button
+                    ></el-col
                 >
             </el-row>
 
             <el-row class="mt20" style="text-align:left"
                 ><el-col :span="24"
                     ><el-button
+                        size="small"
                         round
                         :type="year == 0 ? 'danger' : ''"
                         @click="year = 0"
@@ -47,6 +51,7 @@
                     >
 
                     <el-button
+                        size="small"
                         :type="year == 1 ? 'danger' : ''"
                         round
                         @click="year = 1"

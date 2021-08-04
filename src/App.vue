@@ -132,7 +132,6 @@ export default {
 
 footer {
     width: 100%;
-    border-top: 5px solid #eee222;
     padding: 20px 0;
 }
 

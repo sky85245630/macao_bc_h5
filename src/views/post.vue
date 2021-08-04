@@ -2,11 +2,19 @@
     <div class="home" style="margin: 20px 0 ;">
         <h1 style="text-align: left;">開獎公告</h1>
         <div style="text-align: left;">
-            <el-button round :type="type == 0 ? 'danger' : ''" @click="type = 0"
+            <el-button
+                size="small"
+                round
+                :type="type == 0 ? 'danger' : ''"
+                @click="type = 0"
                 >澳門六合彩</el-button
             >
 
-            <el-button :type="type == 1 ? 'danger' : ''" round @click="type = 1"
+            <el-button
+                size="small"
+                :type="type == 1 ? 'danger' : ''"
+                round
+                @click="type = 1"
                 >接口調用</el-button
             >
         </div>

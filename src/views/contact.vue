@@ -1,6 +1,6 @@
 <template>
     <div class="home" style="margin: 20px 0 ;">
-        <div style="text-align:center;padding: 30px 100px;">
+        <div style="text-align:center;">
             <h1 style="text-align: center;">聯繫我們</h1>
             <br /><br />
             <h4 style="font-weight: normal;">

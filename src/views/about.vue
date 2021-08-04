@@ -6,19 +6,39 @@
             style="width:100%"
         />
         <div class="mt30" style="text-align: left;">
-            <el-button round :type="type == 0 ? 'danger' : ''" @click="type = 0"
+            <el-button
+                size="small"
+                round
+                :type="type == 0 ? 'danger' : ''"
+                @click="type = 0"
                 >關於我們</el-button
             >
 
-            <el-button :type="type == 1 ? 'danger' : ''" round @click="type = 1"
+            <el-button
+                size="small"
+                :type="type == 1 ? 'danger' : ''"
+                round
+                @click="type = 1"
                 >遊戲規範</el-button
             >
-            <el-button :type="type == 2 ? 'danger' : ''" round @click="type = 2"
+            <el-button
+                size="small"
+                :type="type == 2 ? 'danger' : ''"
+                round
+                @click="type = 2"
                 >獎券規則</el-button
             >
+
+            <el-button
+                size="small"
+                :type="type == 3 ? 'danger' : ''"
+                round
+                @click="type = 3"
+                >聯繫我們
+            </el-button>
         </div>
 
-        <div v-show="type == 0" style="text-align:left;padding: 30px 300px;">
+        <div v-show="type == 0" style="text-align:left;">
             <h1 style="text-align: center;">關於我們</h1>
             <br />
             澳門六合彩是從1至49個號碼中選出六個為中獎號碼的獎券，由「賽馬會獎券奧門分公司」經辦。<br /><br />
@@ -89,7 +109,7 @@
             </table>
         </div>
 
-        <div v-show="type == 1" style="text-align:left;padding: 30px 300px;">
+        <div v-show="type == 1" style="text-align:left;">
             <h1 style="text-align: center;">遊戲規範</h1>
             <br />
         </div>
@@ -972,6 +992,26 @@
             </div>
 
             <br />
+        </div>
+
+        <div v-show="type == 3" style="text-align:left">
+            <div class="home" style="margin: 20px 0 ;">
+                <div style="text-align:center;">
+                    <h1 style="text-align: center;">聯繫我們</h1>
+                    <br /><br />
+                    <h4 style="font-weight: normal;">
+                        澳門六合彩將竭誠為您提供最及時、最便捷、及滿意的服務。若有問題可透過以下方式與我們取得聯繫。
+                    </h4>
+                    <br /><br /><br />
+
+                    <img
+                        src="https://mjcdn-ali.lyaichuangrobot.com/macaujc/pc/img/email.png"
+                        alt=""
+                    /><br />
+                    <h5>email：momarksix@gmail.com</h5>
+                    <br /><br /><br />
+                </div>
+            </div>
         </div>
     </div>
 </template>

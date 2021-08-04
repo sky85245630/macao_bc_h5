@@ -178,7 +178,7 @@ footer {
     color: white !important;
     text-align: center;
     font-size: 18px;
-    padding: 10px 20px !important;
+    padding: 10px 5px !important;
     vertical-align: middle;
 }
 

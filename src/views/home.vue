@@ -202,6 +202,11 @@ export default {
     float: right;
 }
 
+.el-carousel__container {
+    position: relative;
+    height: 110px !important;
+}
+
 .box_title .title {
     font-size: 20px;
     float: left;

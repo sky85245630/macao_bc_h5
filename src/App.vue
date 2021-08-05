@@ -207,4 +207,12 @@ footer {
     bottom: 0;
     left: 0;
 }
+
+.el-pagination {
+    white-space: nowrap;
+    padding: 3px 5px !important;
+    color: #303133;
+    margin: 10px 0px !important;
+    font-weight: 700;
+}
 </style>

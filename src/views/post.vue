@@ -19,36 +19,26 @@
             >
         </div>
 
-        <div v-show="type == 0">
-            <div class="home_box" style="margin-bottom:30px">
-                <div class="box_title amlhc">
-                    <span class="title">澳門六合彩</span>
-                    <span class="nextTime"
-                        >第2021204期截止時間：2021-07-23 21:15:00</span
-                    >
-                </div>
-                <div style="padding:50px 0">
-                    <el-row class="mt-5">
-                        <el-col :span="24">
-                            <FlipClock></FlipClock>
-                            <div>
-                                <el-button size="small" type="warning"
-                                    >開獎驗證</el-button
-                                >
-                                <el-button size="small" type="danger"
-                                    >直播</el-button
-                                >
-                            </div>
-                            <br />
-                            <span
-                                style="font-size:18px;cursor:pointer"
-                                @click="$router.push('/post')"
-                                >開獎歷史查詢></span
-                            >
-                        </el-col>
-                    </el-row>
+        <el-row class="mt20">
+            <el-col :span="10" style="text-align:left;line-height: 2;"
+                >開獎視頻</el-col
+            >
 
-                    <el-row class="mt-5">
+            <el-col :span="14"
+                ><el-input
+                    size="small"
+                    v-model="input"
+                    placeholder="请输入期號"
+                    style="width: 120px;margin-right:10px"
+                ></el-input
+                ><el-button size="small" type="primary">搜尋</el-button></el-col
+            >
+        </el-row>
+
+        <div v-show="type == 0">
+            <div class="post_box">
+                <div>
+                    <el-row class="mt20">
                         <el-col :span="24">
                             <span style="font-weight:bold"
                                 >澳門六合彩 第<span
@@ -58,7 +48,10 @@
                                 >期</span
                             >
 
-                            <div class="num">
+                            <div
+                                class="num "
+                                style="margin-top:0px;padding: 30px 0;    border-bottom: 1px solid #eee;"
+                            >
                                 <span>
                                     <span
                                         class="ball"
@@ -77,10 +70,41 @@
                             </div>
                         </el-col>
                     </el-row>
+
+                    <el-row class="mt20">
+                        <div class="box_title">
+                            <span class="">下期截止時間：</span
+                            ><span style="color:red">2021008-15 21:12:00 </span>
+                        </div>
+
+                        <el-col :span="24" class="mt20">
+                            <FlipClock></FlipClock>
+                        </el-col>
+                    </el-row>
                 </div>
             </div>
 
-            <el-table :data="tableData" style="width: 100%">
+            <el-row class="mt20" style="text-align:left"
+                ><el-col :span="24"
+                    ><el-button
+                        size="small"
+                        round
+                        :type="year == 0 ? 'danger' : ''"
+                        @click="year = 0"
+                        >今年</el-button
+                    >
+
+                    <el-button
+                        size="small"
+                        :type="year == 1 ? 'danger' : ''"
+                        round
+                        @click="year = 1"
+                        >去年</el-button
+                    ></el-col
+                ></el-row
+            >
+
+            <el-table :data="tableData" class="mt20" style="width: 100%">
                 <el-table-column prop="issue" label="期號" width="100">
                     <template slot-scope="e">
                         第<span style="color:red">{{ e.row.issue }}</span
@@ -161,6 +185,7 @@ export default {
         return {
             type: 0,
             year: 0,
+            input: "",
             tableData: [
                 {
                     issue: "2021206",
@@ -387,5 +412,16 @@ export default {
     color: #303133;
     margin: 10px 0px !important;
     font-weight: 700;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.post_box {
+    margin: 10px 0;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 </style>

@@ -60,10 +60,15 @@
                 ></el-row
             >
             <el-row>
-                <el-col class="mt50" :span="12" v-for="e in 8" :key="e">
-                    <img src="@/assets/logo.png" alt="" />
+                <el-col
+                    class="mt50 liveElPadding"
+                    :span="12"
+                    v-for="e in 8"
+                    :key="e"
+                >
+                    <img class="liveWidth" src="@/assets/logo.png" alt="" />
                     <div class="mt20">
-                        澳門六合彩 第<span class="red"> 2021206 </span>期
+                        澳門六合彩 第<span class="live_red"> 2021206 </span>期
                         開獎視頻
                     </div>
                 </el-col>
@@ -156,7 +161,7 @@ export default {
     color: black;
 }
 
-.red {
+.live_red {
     color: red;
 }
 .mt20 {
@@ -185,5 +190,13 @@ export default {
     color: #303133;
     margin: 10px 0px !important;
     font-weight: 700;
+}
+
+.liveWidth {
+    width: 100%;
+}
+
+.liveElPadding {
+    padding: 10px;
 }
 </style>

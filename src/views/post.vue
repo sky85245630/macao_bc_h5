@@ -32,8 +32,12 @@
                         <el-col :span="24">
                             <FlipClock></FlipClock>
                             <div>
-                                <el-button type="warning">開獎驗證</el-button>
-                                <el-button type="danger">直播</el-button>
+                                <el-button size="small" type="warning"
+                                    >開獎驗證</el-button
+                                >
+                                <el-button size="small" type="danger"
+                                    >直播</el-button
+                                >
                             </div>
                             <br />
                             <span

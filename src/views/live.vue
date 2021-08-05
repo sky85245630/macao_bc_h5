@@ -93,6 +93,7 @@ export default {
             imgUrl: [
                 "https://mcjccdn-qq.goluosi.com/macaujc/pc/img/swiper1.jpg",
             ],
+            input: "",
             year: 0,
             tableData: [
                 {

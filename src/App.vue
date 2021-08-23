@@ -18,12 +18,14 @@
                             <el-button
                                 v-if="kj_day == 'yes'"
                                 @click="set_kj_day('no')"
+                                size="small"
                                 type="primary"
                                 >澳門</el-button
                             >
                             <el-button
                                 v-if="kj_day == 'no'"
                                 @click="set_kj_day('yes')"
+                                size="small"
                                 type="primary"
                                 >香港</el-button
                             >

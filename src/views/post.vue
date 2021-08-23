@@ -7,7 +7,7 @@
                 round
                 :type="type == 0 ? 'danger' : ''"
                 @click="type = 0"
-                >澳門六合彩</el-button
+                >{{ currentInfo.LotteryName }}</el-button
             >
 
             <el-button
@@ -20,19 +20,25 @@
         </div>
 
         <el-row class="mt20">
-            <el-col :span="10" style="text-align:left;line-height: 2;"
+            <el-col :span="8" style="text-align:left;line-height: 2;"
                 >開獎視頻</el-col
             >
 
-            <el-col :span="14"
+            <el-col :span="16"
                 ><el-input
                     size="small"
-                    v-model="input"
+                    v-model="search"
                     placeholder="请输入期號"
-                    style="width: 120px;margin-right:10px"
+                    style="width: 100px;margin-right:10px"
                 ></el-input
-                ><el-button size="small" type="primary">搜尋</el-button></el-col
-            >
+                ><el-button size="small" type="primary" @click="toSearch"
+                    >搜尋</el-button
+                >
+
+                <el-button size="small" type="warning" @click="reset"
+                    >重置</el-button
+                >
+            </el-col>
         </el-row>
 
         <div v-show="type == 0">
@@ -41,29 +47,31 @@
                     <el-row class="mt20">
                         <el-col :span="24">
                             <span style="font-weight:bold"
-                                >澳門六合彩 第<span
+                                >{{ currentInfo.LotteryName }} 第<span
                                     style="font-weight:200;color:red"
                                 >
-                                    2021203 </span
+                                    {{ currentInfo.LastIssue }} </span
                                 >期</span
                             >
 
                             <div
                                 class="num "
-                                style="margin-top:0px;padding: 30px 0;    border-bottom: 1px solid #eee;"
+                                style="margin-top:0px;padding: 30px 0;border-bottom: 1px solid #eee;"
                             >
                                 <span>
                                     <span
                                         class="ball"
-                                        v-for="(e, index) in draw_num.split(
-                                            ','
-                                        )"
+                                        v-for="(e, index) in draw_num"
                                         :key="index"
-                                        :class="ball_color[index]"
+                                        :class="
+                                            e
+                                                .split(',')
+                                                .map((e) => color_list[e % 6])
+                                        "
                                     >
                                         <span class="balls">{{ e }}</span>
                                         <span class="shengxiao">{{
-                                            final_list[index]
+                                            data_list[e % 12]
                                         }}</span>
                                     </span>
                                 </span>
@@ -72,13 +80,20 @@
                     </el-row>
 
                     <el-row class="mt20">
-                        <div class="box_title">
-                            <span class="">下期截止時間：</span
-                            ><span style="color:red">2021008-15 21:12:00 </span>
+                        <div class="box_title" style="display: contents;">
+                            <span>{{ currentInfo.Issue }} 下期截止時間：</span
+                            ><br /><span style="color:red">{{
+                                currentInfo.EndTime
+                            }}</span>
                         </div>
 
                         <el-col :span="24" class="mt20">
                             <!-- <FlipClock></FlipClock> -->
+                            <flip-countdown
+                                :deadline="flip_endTime"
+                                :showDays="true"
+                                @timeElapsed="timeElapsedHandler"
+                            ></flip-countdown>
                         </el-col>
                     </el-row>
                 </div>
@@ -90,7 +105,7 @@
                         size="small"
                         round
                         :type="year == 0 ? 'danger' : ''"
-                        @click="year = 0"
+                        @click="getHistoryOpenInfo(0)"
                         >今年</el-button
                     >
 
@@ -98,16 +113,16 @@
                         size="small"
                         :type="year == 1 ? 'danger' : ''"
                         round
-                        @click="year = 1"
+                        @click="getHistoryOpenInfo(1)"
                         >去年</el-button
                     ></el-col
                 ></el-row
             >
 
-            <el-table :data="tableData" class="mt20" style="width: 100%">
+            <el-table :data="historyOpenInfo" class="mt20" style="width: 100%">
                 <el-table-column prop="issue" label="期號" width="100">
                     <template slot-scope="e">
-                        第<span style="color:red">{{ e.row.issue }}</span
+                        第<span style="color:red">{{ e.row.Issue }}</span
                         >期
                     </template>
                 </el-table-column>
@@ -118,7 +133,7 @@
                             <span>
                                 <span
                                     class="ball"
-                                    v-for="(q, index) in e.row.openCode.split(
+                                    v-for="(q, index) in e.row.OpenCode.split(
                                         ','
                                     )"
                                     :key="index"
@@ -138,8 +153,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination background layout="prev, pager, next" :total="1000">
-            </el-pagination>
         </div>
 
         <div v-show="type == 1" style="text-align:left;">
@@ -174,46 +187,45 @@
 </template>
 
 <script>
-// import FlipClock from "@/components/flipClock.vue";
+import FlipCountdown from "vue2-flip-countdown";
 
 export default {
     name: "Post",
-    components: {
-        // FlipClock,
+    components: { FlipCountdown },
+    watch: {
+        "$store.state.kj_day": function(e) {
+            // plan1.0
+            // console.log("statttt", e);
+            if (e) {
+                console.log("监听到kj_day");
+                this.getCurrentInfo();
+            } else {
+                this.msg = "监听不到";
+            }
+        },
     },
     data() {
         return {
+            // 澳門六合彩與接口調用
             type: 0,
+            //今年去年
             year: 0,
-            input: "",
-            tableData: [
-                {
-                    issue: "2021206",
-                    openTime: "2021-07-25 21:34:05",
-                    openCode: "43,41,33,42,05,13,21",
-                    videoUrl: "",
-                },
-            ],
-            color: {
-                red: "01,02,07,08,12,13,18,19,23,24,29,30,34,35,40,45,46",
-                green: "05,06,11,16,17,21,22,27,28,32,33,38,39,43,44,49",
-                blue: "03,04,09,10,14,15,20,25,26,31,36,37,41,42,47,48",
-            },
-            animal: [
-                { mouse: "02,14,26,38" },
-                { ox: "01,13,25,37,49" },
-                { tiger: "12,24,36,48" },
-                { rabbit: "11,23,35,47" },
-                { dragon: "10,22,34,46" },
-                { snake: "09,21,33,45" },
-                { house: "08,20,32,44" },
-                { sheep: "07,19,31,43" },
-                { monkey: "06,18,30,42" },
-                { chicken: "05,17,29,41" },
-                { dog: "04,16,28,40" },
-                { pig: "03,15,27,39" },
-            ],
-            data_list: [
+            //搜尋按鈕
+            search: "",
+            pagesize: 10, //设置每页显示条目个数为10
+            currentPage: 1, //设置当前页默认为1
+            filterAutomobileInfs: [], //分页前的数据
+            dialogVisible: false,
+            // tableData: [
+            //     {
+            //         issue: "2021206",
+            //         openTime: "2021-07-25 21:34:05",
+            //         openCode: "43,41,33,42,05,13,21",
+            //         videoUrl: "",
+            //     },
+            // ],
+            flip_endTime: "2021-8-14 17:25:00",
+            list: [
                 "鼠",
                 "牛",
                 "虎",
@@ -227,31 +239,119 @@ export default {
                 "狗",
                 "猪",
             ],
+            data_list: [],
             color_list: ["red", "red", "green", "green", "blue", "blue"],
-            final_list: [],
-            ball_color: [],
-            draw_num: "43,41,33,42,05,13,21",
+            draw_num: "",
+            currentInfo: {},
+            issueOpenInfo: {},
+            historyOpenInfo: [],
+            searchHistoryOpenInfo: [],
+            toPlayData: {
+                Issue: "2021067",
+                LotteryId: 2032,
+                OpenCode: "44,13,26,34,35,14,12",
+                OpenTime: "2021-08-07 21:30:00",
+                Pet: "牛",
+                VideoUrl: "/video/2021067.mp4",
+            },
         };
     },
     methods: {
+        getCurrentInfo() {
+            // console.log("env", process.env.VUE_APP_BASE_DOMAIN);
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/CurrentInfo`;
+            // var url = "http://localhost:81/api/CurrentInfo";
+            // var url = "http://localhost:81/api/is_kj_day";
+            //一開始沒有抓到state資料會預設no
+            let data = { is_hk: this.$store.state.kj_day };
+            // if(!this.$store.state.kj_day){
+            // console.log(typeof this.$store.state.kj_day);
+            // }
+            // console.log("store", this.$store.state.kj_day);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.currentInfo = data;
+            });
+            // console.log("this.$store.state.kj_day", this.$store.state.kj_day);
+            this.getIssueOpenInfo();
+            this.getHistoryOpenInfo();
+        },
+        getIssueOpenInfo() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/IssueOpenInfo`;
+            let data = {
+                lottery: this.currentInfo.LotteryId,
+                is_hk: this.$store.state.kj_day,
+            };
+            // console.log("getIssueOpenInfo", data);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.issueOpenInfo = data;
+                this.initData();
+            });
+        },
+        getHistoryOpenInfo(e) {
+            let today = new Date();
+            // 今年
+            if (e == 0) {
+                this.year = 0;
+                today = today.toISOString().substring(0, 10);
+            }
+            //去年
+            if (e == 1) {
+                this.year = 1;
+                today = today.toISOString().substring(0, 4) - 1 + "-12-31";
+            }
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/HistoryOpenInfoList`;
+            let data = {
+                lottery: this.currentInfo.LotteryId,
+                issueNum: today,
+                is_hk: this.$store.state.kj_day,
+            };
+            // console.log("getHistoryOpenInfo", data);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.historyOpenInfo = data;
+                this.searchHistoryOpenInfo = data;
+            });
+        },
+        timeElapsedHandler() {},
         initData() {
-            //取得生肖
-            this.final_list = this.draw_num
-                .split(",")
-                .map((e) => this.data_list[e % 12]);
+            this.draw_num = this.issueOpenInfo.OpenCode.split(",");
+            let petQQ = this.currentInfo.Pet;
+            let index = this.list.indexOf(petQQ) - 1;
+            let front = this.list.slice(index);
+            let end = this.list.slice(0, index);
+            this.data_list = front.concat(end);
+        },
+        toSearch() {
+            // this.getHistoryOpenInfo();
+            this.historyOpenInfo = this.searchHistoryOpenInfo.filter((e) => {
+                return e.Issue.includes(this.search);
+            });
+            // console.log("search", this.historyOpenInfo.search(this.search));
+        },
+        reset() {
+            this.historyOpenInfo = this.searchHistoryOpenInfo;
+            this.search = "";
+        },
+        toPlay(e) {
+            console.log("e", e);
+            this.dialogVisible = true;
+            this.toPlayData = e.row;
+            // this.video = "@" + e.row.VideoUrl;
 
-            //取得顏色
-            this.ball_color = this.draw_num
-                .split(",")
-                .map((e) => this.color_list[e % 6]);
+            // :src="require(`@${toPlayData.VideoUrl}`)"
+
+            // :src="require('@/video/2021067.mp4')"
         },
     },
-    created() {
-        this.initData();
+    mounted() {
+        // this.initData();
+        this.getCurrentInfo();
+        // this.getIssueOpenInfo();
     },
 };
 </script>
-
 <style>
 .home_box {
     margin-top: 20px;

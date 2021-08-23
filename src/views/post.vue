@@ -78,7 +78,7 @@
                         </div>
 
                         <el-col :span="24" class="mt20">
-                            <FlipClock></FlipClock>
+                            <!-- <FlipClock></FlipClock> -->
                         </el-col>
                     </el-row>
                 </div>
@@ -174,12 +174,12 @@
 </template>
 
 <script>
-import FlipClock from "@/components/flipClock.vue";
+// import FlipClock from "@/components/flipClock.vue";
 
 export default {
     name: "Post",
     components: {
-        FlipClock,
+        // FlipClock,
     },
     data() {
         return {

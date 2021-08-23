@@ -12,16 +12,23 @@
 
         <div class="home_box" style="margin-bottom:30px">
             <div class="box_title amlhc">
-                <span class="title">澳門六合彩</span>
+                <span class="title">{{ currentInfo.LotteryName }}</span>
                 <span class="nextTime"
-                    >第2021204期截止時間：2021-07-23 21:15:00</span
+                    >第{{ currentInfo.Issue }}期截止時間：{{
+                        currentInfo.EndTime
+                    }}</span
                 >
             </div>
             <div style="padding:50px 0">
                 <el-row class="mt-5">
                     <el-col :span="24">
-                        <FlipClock></FlipClock>
-                        <div>
+                        <!-- <FlipClock></FlipClock> -->
+                        <flip-countdown
+                            :deadline="flip_endTime"
+                            :showDays="true"
+                            @timeElapsed="timeElapsedHandler"
+                        ></flip-countdown>
+                        <div style="margin-top:30px">
                             <el-button type="warning">開獎驗證</el-button>
                             <el-button type="danger">直播</el-button>
                         </div>
@@ -37,10 +44,10 @@
                 <el-row class="mt-5">
                     <el-col :span="24">
                         <span style="font-weight:bold"
-                            >澳門六合彩 第<span
+                            >{{ currentInfo.LotteryName }} 第<span
                                 style="font-weight:200;color:red"
                             >
-                                2021203 </span
+                                {{ currentInfo.LastIssue }} </span
                             >期</span
                         >
 
@@ -48,13 +55,17 @@
                             <span>
                                 <span
                                     class="ball"
-                                    v-for="(e, index) in draw_num.split(',')"
+                                    v-for="(e, index) in draw_num"
                                     :key="index"
-                                    :class="ball_color[index]"
+                                    :class="
+                                        e
+                                            .split(',')
+                                            .map((e) => color_list[e % 6])
+                                    "
                                 >
                                     <span class="balls">{{ e }}</span>
                                     <span class="shengxiao">{{
-                                        final_list[index]
+                                        data_list[e % 12]
                                     }}</span>
                                 </span>
                             </span>
@@ -64,10 +75,10 @@
             </div>
         </div>
 
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="historyOpenInfo" style="width: 100%">
             <el-table-column prop="issue" label="期號" width="100">
                 <template slot-scope="e">
-                    第<span style="color:red">{{ e.row.issue }}</span
+                    第<span style="color:red">{{ e.row.Issue }}</span
                     >期
                 </template>
             </el-table-column>
@@ -78,7 +89,7 @@
                         <span>
                             <span
                                 class="ball"
-                                v-for="(q, index) in e.row.openCode.split(',')"
+                                v-for="(q, index) in e.row.OpenCode.split(',')"
                                 :key="index"
                                 :class="
                                     q.split(',').map((e) => color_list[e % 6])
@@ -98,46 +109,35 @@
 </template>
 
 <script>
-import FlipClock from "@/components/flipClock.vue";
+import FlipCountdown from "vue2-flip-countdown";
 
 export default {
     name: "Home",
     components: {
-        FlipClock,
+        FlipCountdown,
+    },
+    watch: {
+        "$store.state.kj_day": function(e) {
+            // plan1.0
+            // console.log("statttt", e);
+            if (e) {
+                // console.log("监听到kj_day");
+                this.getCurrentInfo();
+            } else {
+                this.msg = "监听不到";
+            }
+        },
     },
     data() {
         return {
+            video: "@/video/2021063.mp4",
+            flip_endTime: "2021-8-14 17:25:00",
             imgUrl: [
                 "https://mcjccdn-qq.goluosi.com/macaujc/pc/img/swiper1.jpg",
+                "https://mcjccdn-qq.goluosi.com/macaujc/pc/img/swiper3.jpg",
+                "https://mcjccdn-qq.goluosi.com/macaujc/pc/img/swiper4.jpg",
             ],
-            tableData: [
-                {
-                    issue: "2021206",
-                    openTime: "2021-07-25 21:34:05",
-                    openCode: "43,41,33,42,05,13,21",
-                    videoUrl: "",
-                },
-            ],
-            color: {
-                red: "01,02,07,08,12,13,18,19,23,24,29,30,34,35,40,45,46",
-                green: "05,06,11,16,17,21,22,27,28,32,33,38,39,43,44,49",
-                blue: "03,04,09,10,14,15,20,25,26,31,36,37,41,42,47,48",
-            },
-            animal: [
-                { mouse: "02,14,26,38" },
-                { ox: "01,13,25,37,49" },
-                { tiger: "12,24,36,48" },
-                { rabbit: "11,23,35,47" },
-                { dragon: "10,22,34,46" },
-                { snake: "09,21,33,45" },
-                { house: "08,20,32,44" },
-                { sheep: "07,19,31,43" },
-                { monkey: "06,18,30,42" },
-                { chicken: "05,17,29,41" },
-                { dog: "04,16,28,40" },
-                { pig: "03,15,27,39" },
-            ],
-            data_list: [
+            list: [
                 "鼠",
                 "牛",
                 "虎",
@@ -151,44 +151,127 @@ export default {
                 "狗",
                 "猪",
             ],
+            data_list: [],
             color_list: ["red", "red", "green", "green", "blue", "blue"],
-            final_list: [],
-            ball_color: [],
-            draw_num: "43,41,33,42,05,13,21",
+            draw_num: "",
+            currentInfo: {},
+            issueOpenInfo: {},
+            historyOpenInfo: [],
+            dialogVisible: false,
+            toPlayData: {
+                Issue: "2021067",
+                LotteryId: 2032,
+                OpenCode: "44,13,26,34,35,14,12",
+                OpenTime: "2021-08-07 21:30:00",
+                Pet: "牛",
+                VideoUrl: "/video/2021067.mp4",
+            },
         };
     },
     methods: {
-        initData() {
-            // this.final_list = [
-            //     {
-            //         num: this.draw_num.split(","),
-            //         color: [],
-            //         animal: this.draw_num
-            //             .split(",")
-            //             .map((e) => this.data_list[e % 12]),
-            //     },
-            // ];
-            //取得生肖
-            this.final_list = this.draw_num
-                .split(",")
-                .map((e) => this.data_list[e % 12]);
-
-            //取得顏色
-            this.ball_color = this.draw_num
-                .split(",")
-                .map((e) => this.color_list[e % 6]);
+        getCurrentInfo() {
+            // console.log("env", process.env.VUE_APP_BASE_DOMAIN);
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/CurrentInfo`;
+            // var url = "http://localhost:81/api/CurrentInfo";
+            // var url = "http://localhost:81/api/is_kj_day";
+            //一開始沒有抓到state資料會預設no
+            let data = { is_hk: this.$store.state.kj_day };
+            // if(!this.$store.state.kj_day){
+            // console.log(typeof this.$store.state.kj_day);
+            // }
+            // console.log("store", this.$store.state.kj_day);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.currentInfo = data;
+            });
+            // console.log("this.$store.state.kj_day", this.$store.state.kj_day);
+            this.getIssueOpenInfo();
+            this.getHistoryOpenInfo();
         },
-        asd(e) {
+        getIssueOpenInfo() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/IssueOpenInfo`;
+            let data = {
+                lottery: this.currentInfo.LotteryId,
+                is_hk: this.$store.state.kj_day,
+            };
+            // console.log("getIssueOpenInfo", data);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.issueOpenInfo = data;
+                this.initData();
+            });
+        },
+        getHistoryOpenInfo() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/HistoryOpenInfo`;
+            let data = {
+                lottery: this.currentInfo.LotteryId,
+                issueNum: 6,
+                is_hk: this.$store.state.kj_day,
+            };
+            // console.log("getHistoryOpenInfo", data);
+            this.axios.post(url, data).then((res) => {
+                let { data } = res.data;
+                this.historyOpenInfo = data;
+            });
+        },
+
+        timeElapsedHandler() {},
+        initData() {
+            this.draw_num = this.issueOpenInfo.OpenCode.split(",");
+            let petQQ = this.currentInfo.Pet;
+            let index = this.list.indexOf(petQQ) - 1;
+            let front = this.list.slice(index);
+            let end = this.list.slice(0, index);
+            this.data_list = front.concat(end);
+        },
+        toPlay(e) {
             console.log("e", e);
+            this.dialogVisible = true;
+            this.toPlayData = e.row;
+            // this.video = "@" + e.row.VideoUrl;
+
+            // :src="require(`@${toPlayData.VideoUrl}`)"
+
+            // :src="require('@/video/2021067.mp4')"
         },
     },
-    created() {
-        this.initData();
+    created() {},
+    mounted() {
+        // this.initData();
+        this.getCurrentInfo();
+        // this.getIssueOpenInfo();
     },
 };
 </script>
 
 <style>
+.flip-clock__slot {
+    display: none !important;
+}
+
+.flip-card__top,
+.flip-card__bottom,
+.flip-card__back-bottom,
+.flip-card__back::before,
+.flip-card__back::after {
+    color: #ffffff !important;
+}
+
+.flip-card__top-4digits,
+.flip-card__bottom-4digits,
+.flip-card__back-bottom-4digits,
+.flip-card__back-4digits::before,
+.flip-card__back-4digits::after {
+    color: #ffffff !important;
+}
+
+.flip-card__bottom,
+.flip-card__back-bottom,
+.flip-card__bottom-4digits,
+.flip-card__back-bottom-4digits {
+    color: #ffffff !important;
+}
+
 .home_box {
     margin-top: 20px;
     box-shadow: 0 1px 4px #c8c8c8;

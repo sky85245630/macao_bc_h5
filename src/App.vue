@@ -3,13 +3,30 @@
         <el-col :span="24">
             <div id="nav">
                 <el-row>
-                    <el-col :span="6">
+                    <el-col :span="12">
                         <div style="float: left;">
                             <img
                                 alt="Vue logo"
                                 src="@/assets/logo.png"
                                 style="width: 100px;"
                             />
+                        </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="date">
+                            {{ BJSeviceTime }}<br />
+                            <el-button
+                                v-if="kj_day == 'yes'"
+                                @click="set_kj_day('no')"
+                                type="primary"
+                                >澳門</el-button
+                            >
+                            <el-button
+                                v-if="kj_day == 'no'"
+                                @click="set_kj_day('yes')"
+                                type="primary"
+                                >香港</el-button
+                            >
                         </div>
                     </el-col>
                 </el-row>
@@ -87,12 +104,58 @@ export default {
     data() {
         return {
             activeIndex: "1",
+            kj_day: "",
+            BJSeviceTime: "",
         };
     },
     methods: {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
         },
+        is_kj_day() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/is_kj_day`;
+            this.axios.post(url).then((res) => {
+                this.kj_day = res.data.is_kj_day;
+                this.kj_day = this.kj_day == false ? "yes" : "no";
+                // console.log("is_kj_day", this.kj_day);
+                this.$store.commit("set_kj_day", this.kj_day);
+            });
+        },
+        set_kj_day(e) {
+            // console.log("set_kj_day", e);
+            this.kj_day = e;
+            this.$store.commit("set_kj_day", this.kj_day);
+        },
+        service_time() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/ServerTime`;
+
+            window.setInterval(() => {
+                this.axios.post(url).then((res) => {
+                    // console.log("service_time", res.data.data.BJSeviceTime);
+                    this.BJSeviceTime = res.data.data.BJSeviceTime;
+                    this.BJSeviceTime = this.BJSeviceTime.substring(
+                        0,
+                        this.BJSeviceTime.length - 3
+                    );
+                });
+            }, 30000);
+        },
+        current_time() {
+            let url = `${process.env.VUE_APP_BASE_DOMAIN}/api/ServerTime`;
+            this.axios.post(url).then((res) => {
+                // console.log("service_time", res.data.data.BJSeviceTime);
+                this.BJSeviceTime = res.data.data.BJSeviceTime;
+                this.BJSeviceTime = this.BJSeviceTime.substring(
+                    0,
+                    this.BJSeviceTime.length - 3
+                );
+            });
+        },
+    },
+    created() {
+        this.is_kj_day();
+        this.service_time();
+        this.current_time();
     },
 };
 </script>
@@ -111,7 +174,7 @@ export default {
 
 .date {
     float: right;
-    line-height: 110px;
+    line-height: 24px;
     font-size: 18px;
     color: #a4a4a4;
 }

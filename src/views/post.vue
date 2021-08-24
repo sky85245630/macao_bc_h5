@@ -90,6 +90,7 @@
                         <el-col :span="24" class="mt20">
                             <!-- <FlipClock></FlipClock> -->
                             <flip-countdown
+                                v-if="flip_endTime"
                                 :deadline="flip_endTime"
                                 :showDays="true"
                                 @timeElapsed="timeElapsedHandler"
@@ -224,7 +225,7 @@ export default {
             //         videoUrl: "",
             //     },
             // ],
-            flip_endTime: "2021-8-14 17:25:00",
+            flip_endTime: null,
             list: [
                 "鼠",
                 "牛",
@@ -271,6 +272,7 @@ export default {
             this.axios.post(url, data).then((res) => {
                 let { data } = res.data;
                 this.currentInfo = data;
+                this.flip_endTime = data.EndTime;
             });
             // console.log("this.$store.state.kj_day", this.$store.state.kj_day);
             this.getIssueOpenInfo();
@@ -348,6 +350,8 @@ export default {
     mounted() {
         // this.initData();
         this.getCurrentInfo();
+        this.flip_endTime = this.currentInfo.EndTime;
+
         // this.getIssueOpenInfo();
     },
 };
